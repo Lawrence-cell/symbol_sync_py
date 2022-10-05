@@ -2,16 +2,6 @@
 Author: lawrence-cell 850140027@qq.com
 Generate Date: Do not edit
 LastEditors: lawrence-cell 850140027@qq.com
-LastEditTime: 2022-10-04 10:59:51
-FilePath: \mmse_test_py\interpolating_resampler\manual_mmse_filter.py
-Description: 
-
-Copyright (c) 2022 by lawrence-cell 850140027@qq.com, All Rights Reserved. 
-"""
-"""
-Author: lawrence-cell 850140027@qq.com
-Generate Date: Do not edit
-LastEditors: lawrence-cell 850140027@qq.com
 LastEditTime: 2022-09-29 19:03:33
 FilePath: \mmse_test\manual_mmse_filter.py
 Description: this script is used for learning mmse interpolator filter. the requirement is not allowed to use any module 

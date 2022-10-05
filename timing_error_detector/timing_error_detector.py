@@ -30,7 +30,7 @@ class timing_error_detector:
         self._d_inputs_per_symbol = inputs_per_sample
         self._d_error_depth = error_depth
         for i in range(error_depth):
-            self._d_input.append(0)
+            self._d_input.append(complex(0, 0))
 
     def error(self):
         return self._d_error
@@ -45,7 +45,7 @@ class timing_error_detector:
     def _compute_error_ff(self):
         pass
 
-    # suppose the date type is float
+    # suppose the date type is complex
     def input(self, single_data):
         self._d_input.append(single_data)
         self._advance_input_clock()
@@ -58,5 +58,8 @@ class ted_gardner(timing_error_detector):
         super().__init__(TED_TYPE.GARDNER, 2, 3)
 
     def _compute_error_ff(self):
-
-        return (self._d_input[0] - self._d_input[2]) * self._d_input[1]
+        #     return ((d_input[0].real() - d_input[2].real()) * d_input[1].real()) +
+        #    ((d_input[0].imag() - d_input[2].imag()) * d_input[1].imag());
+        return (self._d_input[0].real - self._d_input[2].real) * self._d_input[
+            1
+        ].real + (self._d_input[0].imag - self._d_input[2].imag) * self._d_input[1].imag
