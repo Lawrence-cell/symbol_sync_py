@@ -64,11 +64,23 @@ class clock_tracking_loop:
         self._d_min_avg_period = min_period
         self._d_nom_avg_period = nominal_period
         self._d_inst_period = nominal_period
-        self._d_zeta(damping)
+        self._d_zeta = damping
         self._d_omega_n_norm = loop_bw
         self._d_ted_gain = ted_gain
         self._d_prev_avg_period = nominal_period
         self._d_prev_inst_period = nominal_period
+
+    def get_avg_period(self):
+        return self._d_avg_period
+
+    def get_inst_period(self):
+        return self._d_inst_period
+
+    def get_phase_n(self):
+        return np.floor(self._d_phase)
+
+    def get_phase_wrap(self):
+        return self._d_phase - self.get_phase_n()
 
     #####################################################SET FUNCTIONS###########################################################################
     def set_nom_avg_period(self, period):
@@ -162,7 +174,9 @@ class clock_tracking_loop:
         if self._d_inst_period <= 0:
             self._d_inst_period = self._d_avg_period
 
-        self._d_phase = self._d_phase + self._d_inst_period
+        # self._d_phase = self._d_phase + self._d_inst_period
+        # self._d_phase_n = np.floor(self._d_phase)
+        # self._d_phase_wrap
 
     """
     description:  constraint the output in a limited zone

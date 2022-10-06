@@ -1,3 +1,13 @@
+"""
+Author: yanggguang 850140027@qq.com
+Generate Date: Do not edit
+LastEditors: Lawrence_cell 850140027@qq.com
+LastEditTime: 2022-10-05 21:28:08
+FilePath: /symbol_sync_py/interpolating_resampler/interpolating_resampler.py
+Description: 
+
+Copyright (c) 2022 by Lawrence_cell 850140027@qq.com, All Rights Reserved. 
+"""
 from math import floor
 
 from filter_taps.mmse_filter_taps import taps
@@ -25,7 +35,8 @@ class interpolating_resampler:
             print("ERROR, the length of the input signal is not enough")
             return
         filter_index = round(mu * NSTEPS)
-        m_filter = self.d_filter_bank[filter_index]
+
+        m_filter = self.d_filter_bank[int(filter_index)]
         # reverse the filter
         m_filter = m_filter[::-1]
         temp = 0
