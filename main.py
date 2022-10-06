@@ -1,4 +1,14 @@
 """
+Author: yanggguang 850140027@qq.com
+Generate Date: Do not edit
+LastEditors: Lawrence_cell 850140027@qq.com
+LastEditTime: 2022-10-05 19:22:08
+FilePath: /symbol_sync_py/main.py
+Description: 
+
+Copyright (c) 2022 by Lawrence_cell 850140027@qq.com, All Rights Reserved. 
+"""
+"""
 Author: yangguang
 Generate Date: Do not edit
 LastEditors: lawrence-cell 850140027@qq.com
@@ -25,7 +35,9 @@ import collections
 if __name__ == "__main__":
     sps = 8
     f = np.fromfile(open("data_grc/befor_sysmbol_sync"), dtype=np.complex)
-    print(f[1:20])
+
+    test = np.sqrt(np.power(9, 2))
+    print(test)
 
     # input_sig = []
 
