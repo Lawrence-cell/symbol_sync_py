@@ -12,6 +12,8 @@ Copyright (c) 2022 by Lawrence_cell 850140027@qq.com, All Rights Reserved.
 from faulthandler import dump_traceback
 from lib2to3.pgen2.token import RPAR
 from math import cos, sqrt
+
+import symbol
 from this import d
 from interpolating_resampler.interpolating_resampler import *
 from timing_error_detector.timing_error_detector import *
@@ -19,115 +21,66 @@ from clock_tracking_loop.clock_tracking_loop import *
 from utils.conv import *
 import numpy as np
 import scipy.io as scio
-import collections
-
-
-def sync_reset_internal_clocks(d_interps_per_symbol_n):
-    return d_interps_per_symbol_n - 1
-    update_internal_clock_outputs()
-
-
-def update_internal_clock_outputs(
-    d_interp_clock,
-    d_interps_per_ted_input_n,
-    d_interps_per_output_sample_n,
-    d_interps_per_symbol_n,
-):
-    d_ted_input_clock = d_interp_clock % d_interps_per_ted_input_n == 0
-    d_output_sample_clock = d_interp_clock % d_interps_per_output_sample_n == 0
-    d_symbol_clock = d_interp_clock % d_interps_per_symbol_n == 0
-
+import matplotlib.pyplot as plt
 
 if __name__ == "__main__":
     sps = 8
     output_sps = 1
-    d_ted_sps = 2
+    ted_sps = 2
+    loop_bw = 0.045
+    max_deviation = 1.5
+    damping_factor = 1
+
+    interps_per_symbol = ted_sps
+
+    # source data
     f = np.fromfile(open("data_grc/befor_sysmbol_sync"), dtype=np.complex64)
-    # np.save("test_input", f)
+    # f = np.fromfile(
+    #     open("/home/yangguang/Desktop/symbol_sync_cpp/test_data"), dtype=np.complex64
+    # )
 
     # print(f)
-    #        loop_bw,
-    # max_period,
-    # min_period,
-    #  d_clock(loop_bw,
-    #           sps + max_deviation,
-    #           sps - max_deviation,
-    #           sps,
-    #           damping_factor,
-    #           ted_gain),
+
     d_interp = interpolating_resampler()
-    d_clock_loop = clock_tracking_loop(0.045, 8 + 1.5, 8 - 1.5, 8, 1)
+    d_clock_loop = clock_tracking_loop(
+        loop_bw, sps + max_deviation, sps - max_deviation, sps, damping_factor
+    )
     d_ted = ted_gardner()
 
     stop_point = len(f) - 8
     i = 0
     interpolants = []
+
+    interp_clock = 1
+    symbol_clock = 0
+    d_inst_clock_period = 0
+
+    imag_ted_output = []
+
+    times = 0
     while i <= stop_point:
+        interp_clock = np.mod(interp_clock + 1, interps_per_symbol)
+        symbol_clock = interp_clock == 0
         interp_output = d_interp.interpolate(f, i, d_interp.d_phase_wrap)
         interpolants.append(interp_output)
+
         d_ted.input(interp_output)
         ted_output = d_ted.error()
-        d_clock_loop.advance_loop(ted_output)
-        d_inst_clock_period = d_clock_loop.get_inst_period() / 2
+        imag_ted_output.append(ted_output)
+
+        if symbol_clock:
+            d_clock_loop.advance_loop(ted_output)
+            d_inst_clock_period = d_clock_loop.get_inst_period() / 2
+            d_clock_loop.phase_wrap()
+
         d_interp.advance_phase(d_inst_clock_period)
         i += d_interp.d_phase_n
 
-    # tmp = interpolants[::2]
-    # b = []
-    # for a in tmp:
-    #     b.append(a.real)
-    #     b.append(a.imag)
-    # # tmp = [c.real,c.imag for c in tmp]
-    # import struct
-
-    # NN = len(b)
-    # tmp_bytes = struct.pack(NN * "f", *b)
-    # with open("test.dat", "wb") as f:
-    #     f.write(tmp_bytes)
-
     temp = np.array(interpolants)
-    final_output = temp[1::2]
+    final_output = temp[0::2]
 
-    # print(len(final_output[0:]))
+    np.save("data_grc/py_output", final_output)
 
-    np.save("data_grc/output_py", final_output)
-
-    # final_output.tofile("data_grc/output_py")
-    # print(len(final_output))
-
-    # output_gnuradio = np.fromfile(open("data_grc/output_gnuradio"), dtype=np.complex)
-    # print(len(output_gnuradio))
-
-    # d_interps_per_symbol_n = 2
-    # d_interps_per_ted_input_n = d_interps_per_symbol_n / 2
-    # d_interps_per_output_sample_n = d_interps_per_symbol_n / output_sps
-
-    # d_interp_clock = d_interps_per_symbol_n - 1
-
-    # d_interps_per_symbol_n = std::lcm(d_ted->inputs_per_symbol(), d_osps_n);
-    # d_interps_per_ted_input_n = d_interps_per_symbol_n / d_ted->inputs_per_symbol();
-    # d_interps_per_output_sample_n = d_interps_per_symbol_n / d_osps_n;
-
-    # d_interps_per_symbol = static_cast<float>(d_interps_per_symbol_n);
-    # d_interps_per_ted_input = static_cast<float>(d_interps_per_ted_input_n);
-
-    # d_interp_clock = d_interps_per_symbol_n - 1;
-    # sync_reset_internal_clocks();
-    # d_inst_interp_period = d_inst_clo ck_period / d_interps_per_symbol;
-
-    # input_sig = []
-
-    # for i in range(100):
-    #     input_sig.append(complex(i, i))
-
-    # d_interp = interpolating_resampler()
-
-    # for i in range(100):
-    #     print(d_interp.interpolate(input_sig, i, 0.5))
-
-    # d_ted = ted_gardner()
-    # d_ted.input(complex(1 + 2j))
-    # d_ted.input(complex(1 + 3j))
-    # d_ted.input(complex(2 + 3j))
-
-    # print(d_ted.error())
+    plt.figure()
+    plt.plot(imag_ted_output)
+    plt.show()

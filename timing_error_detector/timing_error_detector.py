@@ -12,7 +12,7 @@ from abc import abstractmethod
 from enum import Enum
 import collections
 from operator import mod
-from black import err
+# from black import err
 
 TED_TYPE = Enum("TED_TYPE", ("GARDNER", "EARLY_LATE"))
 
