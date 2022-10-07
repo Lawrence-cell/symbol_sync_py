@@ -42,7 +42,9 @@ if __name__ == "__main__":
     sps = 8
     output_sps = 1
     d_ted_sps = 2
-    f = np.fromfile(open("data_grc/befor_sysmbol_sync"), dtype=np.complex)
+    f = np.fromfile(open("data_grc/befor_sysmbol_sync"), dtype=np.complex64)
+    # np.save("test_input", f)
+
     # print(f)
     #        loop_bw,
     # max_period,
@@ -84,13 +86,7 @@ if __name__ == "__main__":
     #     f.write(tmp_bytes)
 
     temp = np.array(interpolants)
-    final_output = temp[0::2]
-    import matplotlib.pyplot as plt
-
-    plt.figure()
-    plt.plot(final_output.real, final_output.imag)
-    plt.savefig("test.png")
-    # plt.show()
+    final_output = temp[1::2]
 
     # print(len(final_output[0:]))
 
