@@ -1,22 +1,26 @@
 import imp
+from xml.sax.saxutils import prepare_input_source
 from matplotlib.artist import ArtistInspector
 
 
 import numpy as np
 
-after_interp = np.fromfile(
-    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/grc_after_interp"),
+eplison800m = np.fromfile(
+    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/eplison800m"),
     dtype=np.complex64,
 )
-ted_error = np.fromfile(
-    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/grc_after_ted"),
+eplison850m = np.fromfile(
+    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/eplison850m"),
     dtype=np.float32,
 )
-loop_output = np.fromfile(
-    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/grc_after_loop"),
+eplison900m = np.fromfile(
+    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/eplison900m"),
+    dtype=np.float32,
+)
+eplison1000m = np.fromfile(
+    open("/home/yangguang/Desktop/symbol_sync_py/data_grc/eplison1000m"),
     dtype=np.float32,
 )
 
 
-# np.save("data_grc/py_output", after_interp[0::2])
-print(loop_output[0:100])
+print(eplison1000m)

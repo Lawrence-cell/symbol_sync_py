@@ -77,8 +77,11 @@ if __name__ == "__main__":
     grc_output = np.fromfile(open("data_grc/grc_output"), dtype=np.complex64)
 
     # plt.figure()
-    plt.scatter(final_output.real, final_output.imag, c="red")
-    plt.scatter(grc_output.real, grc_output.imag, c="yellow")
+    # plt.scatter(f[0:1000].real, f[0:1000].imag, c="red")
+    # plt.show()
+
+    plt.scatter(final_output[500:5000].real, final_output[500:5000].imag, c="red")
+    # plt.scatter(grc_output[2000:4000].real, grc_output[2000:4000].imag, c="yellow")
     plt.show()
 
-    # np.save("data_grc/py_output", f)
+    np.save("data_grc/py_output", final_output)
