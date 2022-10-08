@@ -34,12 +34,7 @@ if __name__ == "__main__":
     interps_per_symbol = ted_sps
 
     # source data
-    f = np.fromfile(open("data_grc/befor_sysmbol_sync"), dtype=np.complex64)
-    # f = np.fromfile(
-    #     open("/home/yangguang/Desktop/symbol_sync_cpp/test_data"), dtype=np.complex64
-    # )
-
-    # print(f)
+    f = np.fromfile(open("data_grc/before_symbol_sync"), dtype=np.complex64)
 
     d_interp = interpolating_resampler()
     d_clock_loop = clock_tracking_loop(
@@ -55,18 +50,16 @@ if __name__ == "__main__":
     symbol_clock = 0
     d_inst_clock_period = 0
 
-    imag_ted_output = []
-
     times = 0
     while i <= stop_point:
         interp_clock = np.mod(interp_clock + 1, interps_per_symbol)
         symbol_clock = interp_clock == 0
+
         interp_output = d_interp.interpolate(f, i, d_interp.d_phase_wrap)
         interpolants.append(interp_output)
 
         d_ted.input(interp_output)
         ted_output = d_ted.error()
-        imag_ted_output.append(ted_output)
 
         if symbol_clock:
             d_clock_loop.advance_loop(ted_output)
@@ -78,9 +71,6 @@ if __name__ == "__main__":
 
     temp = np.array(interpolants)
     final_output = temp[0::2]
+    print(max(f.real))
 
-    np.save("data_grc/py_output", final_output)
-
-    plt.figure()
-    plt.plot(imag_ted_output)
-    plt.show()
+    np.save("data_grc/py_output", f)

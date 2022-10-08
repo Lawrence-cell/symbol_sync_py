@@ -17,4 +17,6 @@ loop_output = np.fromfile(
     dtype=np.float32,
 )
 
-print(ted_error[0:100])
+
+# np.save("data_grc/py_output", after_interp[0::2])
+print(loop_output[0:100])

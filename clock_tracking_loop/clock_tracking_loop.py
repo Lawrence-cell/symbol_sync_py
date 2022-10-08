@@ -15,9 +15,11 @@ from re import L
 from select import select
 from time import sleep
 from tkinter import E
+
 # from boto import set_file_logger
 from keyring import set_keyring
 import numpy as np
+
 # from pandas import period_range
 
 
@@ -64,11 +66,13 @@ class clock_tracking_loop:
         self._d_min_avg_period = min_period
         self._d_nom_avg_period = nominal_period
         self._d_inst_period = nominal_period
-        self._d_zeta = damping
+
         self._d_omega_n_norm = loop_bw
         self._d_ted_gain = ted_gain
         self._d_prev_avg_period = nominal_period
         self._d_prev_inst_period = nominal_period
+        self.set_damping_factor(damping)
+        self.set_loop_bw(loop_bw)
 
     def get_avg_period(self):
         return self._d_avg_period
