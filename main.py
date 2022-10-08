@@ -71,6 +71,14 @@ if __name__ == "__main__":
 
     temp = np.array(interpolants)
     final_output = temp[0::2]
-    print(max(f.real))
 
-    np.save("data_grc/py_output", f)
+    # test = np.array([1 + 1j, 1 - 1j, -1 + 1j, -1 - 1j])
+
+    grc_output = np.fromfile(open("data_grc/grc_output"), dtype=np.complex64)
+
+    # plt.figure()
+    plt.scatter(final_output.real, final_output.imag, c="red")
+    plt.scatter(grc_output.real, grc_output.imag, c="yellow")
+    plt.show()
+
+    # np.save("data_grc/py_output", f)

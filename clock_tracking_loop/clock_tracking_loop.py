@@ -17,7 +17,7 @@ from time import sleep
 from tkinter import E
 
 # from boto import set_file_logger
-from keyring import set_keyring
+
 import numpy as np
 
 # from pandas import period_range
