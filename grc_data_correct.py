@@ -1,6 +1,6 @@
 import imp
 from xml.sax.saxutils import prepare_input_source
-from matplotlib.artist import ArtistInspector
+import matplotlib.pyplot as plt
 
 
 import numpy as np
@@ -23,4 +23,11 @@ eplison1000m = np.fromfile(
 )
 
 
-print(eplison1000m)
+max_len = max(len(eplison1000m), len(eplison800m), len(eplison850m), len(eplison900m))
+x = np.arange(0, max_len, 1)
+for i in [eplison1000m, eplison800m, eplison850m, eplison900m]:
+    while len(i) < max_len:
+        np.append(i, 0)
+plt.plot(x, eplison1000m, c="red")
+plt.plot(x, eplison850m, c="blue")
+plt.show()
